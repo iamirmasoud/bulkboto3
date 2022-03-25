@@ -25,8 +25,6 @@ setup(
     install_requires=[
         "boto3==1.21.26",
         "tqdm",
-        "black",
-        "isort",
     ],
     keywords=["boto", "s3", "parallel", "bulk"],
     # TODO: add classifiers
