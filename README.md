@@ -15,7 +15,7 @@
     <a href="https://github.com/iamirmasoud/bulk_boto"><strong>Explore the docs »</strong></a>
     <br /> 
     -->
-    <a href="https://github.com/iamirmasoud/bulk_boto/examples.py">View Examples</a>
+    <a href="examples.py">View Examples</a>
     ·
     <a href="https://github.com/iamirmasoud/bulk_boto/issues">Report Bug/Request Feature</a>
   </p>
@@ -26,7 +26,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About Bulk Boto</a>
+      <a href="#about-bulk-boto">About Bulk Boto</a>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -64,7 +64,7 @@ pip install bulk_boto
 ```
 
 ## Usage
-You can also find the following scripts in [examples.py](examples.py).
+You can find the following scripts in [examples.py](examples.py).
 
 #### Import and instantiate a `BulkBoto` object
 ```python
@@ -90,7 +90,7 @@ bulk_boto_agent.create_new_bucket(bucket_name=TARGET_BUCKET)
 
 ####  Upload a whole directory with its structure to an S3 bucket in multi thread mode
 Suppose that there is a directory with the following structure on your local machine:
-```bazaar
+```console
 test_dir
 ├── first_subdir
 │   ├── f1
@@ -129,7 +129,7 @@ bulk_boto_agent.download_dir_from_storage(
 ```
 
 The structure of downloaded directory will be as follows on the local directory:
-```bazaar
+```console
 new_test_dir
 └── my_storage_dir
     ├── first_subdir
