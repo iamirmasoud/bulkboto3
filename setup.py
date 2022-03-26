@@ -1,15 +1,14 @@
 from setuptools import find_namespace_packages, setup
 
-# Generic release markers:
-#   X.Y.Z
-#   X : for major change and new modelings
-#   Y : for modeling enhancement
-#   Z : for bug fixes and refactors
-VERSION = "1.0.0"
-DESCRIPTION = "Bulk Boto Package"
-LONG_DESCRIPTION = "Bulk and parallel Boto package"
 
-print(f"Installing Bulk Boto version: {VERSION}")
+def readme():
+    with open("README.md") as f:
+        return f.read()
+
+
+VERSION = "1.0.0"
+DESCRIPTION = "A python package for parallel and bulk operations on S3 based on boto3"
+LONG_DESCRIPTION = readme()
 
 setup(
     name="bulk_boto",
@@ -26,10 +25,21 @@ setup(
         "boto3==1.21.26",
         "tqdm",
     ],
-    keywords=["boto", "s3", "parallel", "bulk"],
-    # TODO: add classifiers
+    keywords=[
+        "Boto3",
+        "S3",
+        "Parallel",
+        "Bulk",
+        "Boto",
+        "Bulk Boto",
+        "Simple Storage Service",
+        "Minio",
+        "Amazon S3",
+        "Python",
+    ],
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3.9",
+        "Operating System :: OS Independent",
     ],
 )

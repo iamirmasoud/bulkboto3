@@ -1,5 +1,6 @@
 import itertools
 import logging
+import multiprocessing as mp
 import os
 import time
 from multiprocessing.pool import ThreadPool
@@ -11,6 +12,7 @@ import botocore
 from botocore.client import Config
 from tqdm import tqdm
 
+from .exceptions import DirectoryNotFoundException
 from .transfer_path import StorageTransferPath
 
 logger = logging.getLogger(__name__)
@@ -37,10 +39,10 @@ class BulkBoto:
         verbose: bool = False,
     ) -> None:
         """
-        :param endpoint_url: Endpoint_url
-        :param aws_access_key_id: AWS access key id
-        :param aws_secret_access_key: AWS secret access key
-        :param max_pool_connections: Number of allowed pool connections
+        :param endpoint_url: Endpoint_url.
+        :param aws_access_key_id: AWS access key id.
+        :param aws_secret_access_key: AWS secret access key.
+        :param max_pool_connections: Number of allowed pool connections.
         :param verbose: Show upload progressbar.
         """
         self.verbose = verbose
@@ -50,7 +52,9 @@ class BulkBoto:
                 endpoint_url=endpoint_url,
                 aws_access_key_id=aws_access_key_id,
                 aws_secret_access_key=aws_secret_access_key,
-                config=Config(signature_version="s3v4", max_pool_connections=max_pool_connections),
+                config=Config(
+                    signature_version="s3v4", max_pool_connections=max_pool_connections
+                ),
             )
         except Exception as e:
             logger.exception(f"Cannot connect to object storage. {e}")
@@ -87,7 +91,11 @@ class BulkBoto:
         except Exception as e:
             logger.warning(f"Cannot empty bucket: '{bucket_name}'. {e}")
 
-    def upload(self, bucket_name: str, upload_paths: Union[StorageTransferPath, List[StorageTransferPath]]) -> None:
+    def upload(
+        self,
+        bucket_name: str,
+        upload_paths: Union[StorageTransferPath, List[StorageTransferPath]],
+    ) -> None:
         """
         Upload list of local files to object storage one by one.
         :param bucket_name: Name of the bucket.
@@ -99,11 +107,15 @@ class BulkBoto:
         for path in tqdm(upload_paths, disable=not self.verbose):
             bucket.upload_file(path.local_path, path.storage_path)
 
-    def download(self, bucket_name: str, download_paths: Union[StorageTransferPath, List[StorageTransferPath]]) -> None:
+    def download(
+        self,
+        bucket_name: str,
+        download_paths: Union[StorageTransferPath, List[StorageTransferPath]],
+    ) -> None:
         """
         Download list of files from object storage to local one by one.
         :param bucket_name: Name of the bucket.
-        :param download_paths: List of StorageTransferPath objects to download from object storage to local.
+        :param download_paths: List of `StorageTransferPath` objects to download from object storage to local.
         """
         if isinstance(download_paths, StorageTransferPath):
             download_paths = [download_paths]
@@ -130,38 +142,59 @@ class BulkBoto:
             if e.response["Error"]["Code"] == "404":
                 return False
             else:
-                # Something else has gone wrong.
+                logger.exception("Something else has gone wrong.")
                 raise
 
-    def get_objects_list(self, bucket_name: str, storage_dir: str = "") -> List[str]:
+    def list_objects(self, bucket_name: str, storage_dir: str = "") -> List[str]:
         """
-        Get all objects list in a specific on the object storage.
+        Get the list of all objects in a specific directory on the object storage.
         :param bucket_name: Name of the bucket.
-        :param storage_dir: Base directory on the object storage get list of objects.
+        :param storage_dir: Base directory on the object storage to get list of objects.
         """
         bucket = self._get_bucket(bucket_name)
-        return [storage_object.key for storage_object in bucket.objects.filter(Prefix=storage_dir)]
+        return [_object.key for _object in bucket.objects.filter(Prefix=storage_dir)]
 
     def upload_dir_to_storage(
-        self, bucket_name: str, local_dir: str, storage_dir: str = "", n_threads: int = 50
+        self,
+        bucket_name: str,
+        local_dir: str,
+        storage_dir: str = "",
+        n_threads: int = mp.cpu_count() * 7,
     ) -> None:
         """
         Upload a local directory with its structure (subdirectories) to the object storage.
         :param bucket_name: Name of the bucket.
-        :param local_dir: Local base directory to upload objects.
+        :param local_dir: Local base directory to upload objects from.
         :param storage_dir: Object storage base directory to upload objects.
-        :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel usage.
+        :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel mode.
         """
         logger.info(
             f"Start uploading from local '{local_dir}' to '{storage_dir}' on the object storage "
             f"with {n_threads} threads."
         )
 
-        local_files = [str(path) for path in Path(local_dir).rglob("*") if path.is_file()]
+        if not Path(local_dir).is_dir():
+            raise DirectoryNotFoundException(
+                f"Directory `{local_dir}` does not exists."
+            )
+
+        local_files = [
+            str(path) for path in Path(local_dir).rglob("*") if path.is_file()
+        ]
         upload_paths = []
         for local_file_path in local_files:
-            storage_file_path = os.path.join(storage_dir, os.path.relpath(local_file_path, local_dir))
-            upload_paths.append(StorageTransferPath(storage_path=storage_file_path, local_path=local_file_path))
+            storage_file_path = os.path.join(
+                storage_dir, os.path.relpath(local_file_path, local_dir)
+            )
+            upload_paths.append(
+                StorageTransferPath(
+                    storage_path=storage_file_path, local_path=local_file_path
+                )
+            )
+
+        if not upload_paths:
+            logger.warning(f"No files found at `{local_dir}`.")
+            return
 
         try:
             start_time = time.time()
@@ -184,27 +217,31 @@ class BulkBoto:
                 self.upload(bucket_name=bucket_name, upload_paths=upload_paths)
 
             logger.info(
-                f"Successfully uploaded {len(upload_paths)} files to '{bucket_name}' "
+                f"Successfully uploaded {len(upload_paths)} files to bucket '{bucket_name}' "
                 f"in {(time.time() - start_time):.2f} seconds."
             )
         except Exception as e:
-            logger.exception(f"Cannot upload_parallel files. {e}")
+            logger.exception(f"Cannot upload files. {e}")
             raise
 
     def download_dir_from_storage(
-        self, bucket_name: str, storage_dir: str, local_dir: str = "", n_threads: int = 50
+        self,
+        bucket_name: str,
+        storage_dir: str,
+        local_dir: str = "",
+        n_threads: int = mp.cpu_count() * 7,
     ) -> None:
         """
         Download a whole directory with its structure (subdirectories) from the object storage to a local directory.
         :param bucket_name: Name of the bucket.
-        :param local_dir: Local base directory to put downloaded objects.
-        :param storage_dir: Object storage base  directory to download objects from.
-        :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel usage.
+        :param local_dir: Local directory to put downloaded objects.
+        :param storage_dir: Object storage base directory to download objects from.
+        :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel mode.
         """
         logger.info(
             f"Start downloading from '{storage_dir}' on storage to local '{local_dir}' with {n_threads} threads."
         )
-        objects = self.get_objects_list(bucket_name=bucket_name, storage_dir=storage_dir)
+        objects = self.list_objects(bucket_name=bucket_name, storage_dir=storage_dir)
 
         # create the directories structure in local
         unique_dirs = {os.path.dirname(path) for path in objects}
@@ -213,11 +250,17 @@ class BulkBoto:
                 os.makedirs(os.path.join(local_dir, directory), exist_ok=True)
 
         download_paths = []
-        for storage_object in objects:
+        for _object in objects:
             download_paths.append(
-                StorageTransferPath(storage_path=storage_object, local_path=os.path.join(local_dir, storage_object))
+                StorageTransferPath(
+                    storage_path=_object,
+                    local_path=os.path.join(local_dir, _object),
+                )
             )
 
+        if not download_paths:
+            logger.warning(f"No files found at `{storage_dir}`.")
+            return
         try:
             start_time = time.time()
             bucket = self._get_bucket(bucket_name)
@@ -237,7 +280,7 @@ class BulkBoto:
                 self.download(bucket_name=bucket_name, download_paths=download_paths)
 
             logger.info(
-                f"Successfully downloaded {len(download_paths)} files from '{bucket_name}' "
+                f"Successfully downloaded {len(download_paths)} files from bucket: '{bucket_name}' "
                 f"in {(time.time() - start_time):.2f} seconds."
             )
         except Exception as e:
