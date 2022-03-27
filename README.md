@@ -2,7 +2,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/iamirmasoud/bulk_boto">
+  <a href="https://github.com/iamirmasoud/bulkboto">
     <img src="imgs/logo.jpg" alt="Logo" width="100" height="100">
   </a>
     
@@ -12,12 +12,12 @@
     Python package for fast and parallel transfer of bulk of files to S3 based on boto3!
     <br />
     <!-- 
-    <a href="https://github.com/iamirmasoud/bulk_boto"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/iamirmasoud/bulkboto"><strong>Explore the docs »</strong></a>
     <br /> 
     -->
     <a href="examples.py">View Examples</a>
     ·
-    <a href="https://github.com/iamirmasoud/bulk_boto/issues">Report Bug/Request Feature</a>
+    <a href="https://github.com/iamirmasoud/bulkboto/issues">Report Bug/Request Feature</a>
   </p>
 </div>
 
@@ -71,10 +71,10 @@ directories when transferring them. There are also some other features as follow
 * [pip](https://pip.pypa.io/en/stable/)
   
 ### Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulk_boto`.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulkboto`.
 
 ```bash
-pip install bulk_boto
+pip install bulkboto
 ```
 
 ## Usage
@@ -82,12 +82,12 @@ You can find the following scripts in [examples.py](examples.py).
 
 #### Import and instantiate a `BulkBoto` object with your credentials
 ```python
-from bulk_boto import BulkBoto
+from bulkboto import BulkBoto
 TARGET_BUCKET = "test-bucket"
 NUM_TRANSFER_THREADS = 50
 TRANSFER_VERBOSITY = True
 
-bulk_boto_agent = BulkBoto(
+bulkboto_agent = BulkBoto(
     resource_type="s3",
     endpoint_url="<Your storage endpoint>",
     aws_access_key_id="<Your access key>",
@@ -99,7 +99,7 @@ bulk_boto_agent = BulkBoto(
 
 #### Create a new bucket
 ```python
-bulk_boto_agent.create_new_bucket(bucket_name=TARGET_BUCKET)
+bulkboto_agent.create_new_bucket(bucket_name=TARGET_BUCKET)
 ```
 
 ####  Upload a whole directory with its structure to an S3 bucket in multi thread mode
@@ -116,7 +116,7 @@ test_dir
 To upload the directory (with its subdirectories) to the bucket 
 under a new directory name called `my_storage_dir`:
 ```python
-bulk_boto_agent.upload_dir_to_storage(
+bulkboto_agent.upload_dir_to_storage(
      bucket_name=TARGET_BUCKET,
      local_dir="test_dir",
      storage_dir="my_storage_dir",
@@ -130,7 +130,7 @@ bulk_boto_agent.upload_dir_to_storage(
 
 #### Download a whole directory with its structure to a local directory in multi thread mode
 ```python
-bulk_boto_agent.download_dir_from_storage(
+bulkboto_agent.download_dir_from_storage(
     bucket_name=TARGET_BUCKET,
     storage_dir="my_storage_dir",
     local_dir="new_test_dir",
@@ -157,7 +157,7 @@ You can set `local_dir=''` (it is the default value) to avoid the creation of th
 
 #### Delete all objects on a bucket
 ```python
-bulk_boto_agent.empty_bucket(TARGET_BUCKET)
+bulkboto_agent.empty_bucket(TARGET_BUCKET)
 # output: 
 # 2022-03-26 22:23:23 — INFO — Successfully deleted objects on: 'test-bucket'.
 ```
@@ -165,14 +165,14 @@ bulk_boto_agent.empty_bucket(TARGET_BUCKET)
 #### Check if a file exists in a bucket
 ```python
 print(
-    bulk_boto_agent.check_object_exists(
+    bulkboto_agent.check_object_exists(
         bucket_name=TARGET_BUCKET, object_path="my_storage_dir/first_subdir/test_file.txt"
     )
 )
 # output: False 
 
 print(
-    bulk_boto_agent.check_object_exists(
+    bulkboto_agent.check_object_exists(
         bucket_name=TARGET_BUCKET, object_path="my_storage_dir/first_subdir/f1"
     )
 )
@@ -182,7 +182,7 @@ print(
 #### Get list of objects in a bucket (with prefix)
 ```python
 print(
-    bulk_boto_agent.list_objects(
+    bulkboto_agent.list_objects(
         bucket_name=TARGET_BUCKET, storage_dir="my_storage_dir"
     )
 )
@@ -190,7 +190,7 @@ print(
 # ['my_storage_dir/first_subdir/f1', 'my_storage_dir/first_subdir/f2', 'my_storage_dir/first_subdir/f3', 'my_storage_dir/second_subdir/f4']
 
 print(
-    bulk_boto_agent.list_objects(
+    bulkboto_agent.list_objects(
         bucket_name=TARGET_BUCKET, storage_dir="my_storage_dir/second_subdir"
     )
 )
@@ -205,7 +205,7 @@ Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds t
 
 ## Contributing
 Any contributions you make are **greatly appreciated**. If you have a suggestion that would make this better, please fork the repo and create a pull request. 
-You can also simply open an issue with the tag "enhancement". To contribute to `bulk_boto`, follow these steps:
+You can also simply open an issue with the tag "enhancement". To contribute to `bulkboto`, follow these steps:
 
 1. Fork this repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)

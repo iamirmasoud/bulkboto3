@@ -7,10 +7,10 @@ from setuptools import find_namespace_packages, setup
 HERE = pathlib.Path(__file__).parent
 
 # Package meta-data.
-NAME = "bulk_boto"
+NAME = "bulkboto"
 VERSION = "1.0.0"
 DESCRIPTION = "A python package for parallel and bulk operations on S3 based on boto3"
-URL = "https://github.com/iamirmasoud/bulk_boto"
+URL = "https://github.com/iamirmasoud/bulkboto"
 AUTHOR = "Amir Masoud Sefidian"
 AUTHOR_EMAIL = "amir.masoud.sefidian@gmail.com"
 REQUIRES_PYTHON = ">=3.3.0"
@@ -40,7 +40,7 @@ setup(
     url=URL,
     license="MIT",
     python_requires=REQUIRES_PYTHON,
-    packages=find_namespace_packages(include=["bulk_boto.*"]),
+    packages=find_namespace_packages(include=["bulkboto.*"]),
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
