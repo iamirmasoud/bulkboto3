@@ -56,7 +56,7 @@ The Bulk Boto package solves these issues. It speeds up transferring of many sma
 executing multiple download/upload operations in parallel by leveraging the Python multiprocessing module. 
 Depending on the number of cores of your machine, Bulk Boto can make S3 transfers even 100X faster than sequential 
 mode using traditional Boto3! Furthermore, Bulk Boto can keep the original folder structure of files and 
-directories when transferring them.
+directories when transferring them. There are also some other features as follows.
 
 ### Main Functionalities
   - Multi thread uploading/downloading of a directory (keeping the directory structure) to/from S3 object storage
