@@ -1,4 +1,6 @@
 # Change Log:
+**v1.0.2:**
+- Fix `find_namespace_packages` argument in `setup.py`
 
 **v1.0.1:**
 - Fix links for PyPI
