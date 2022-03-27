@@ -9,7 +9,7 @@
   <h3 align="center">Bulk Boto</h3>
 
   <p align="center">
-    Python package for parallel and bulk operations on S3 based on boto3!
+    Python package for fast and parallel transfer of bulk of files to S3 based on boto3!
     <br />
     <!-- 
     <a href="https://github.com/iamirmasoud/bulk_boto"><strong>Explore the docs »</strong></a>
@@ -44,8 +44,22 @@
 </details>
 
 ## About Bulk Boto
+[Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html) is the official Python SDK 
+for accessing and managing all AWS resources such as Amazon Simple Storage Service (S3). 
+Generally, it's pretty ok to transfer a small number of files using Boto3. However, transferring a large number of 
+small files impede performance. Although it only takes a few milliseconds per file to transfer, 
+it can take up to hours to transfer hundreds of thousands, or millions, of files if you do it sequentially. 
+Moreover, because Amazon S3 does not have folders/directories, managing the hierarchy of directories and files 
+manually can be a bit tedious especially if there are many files located in different folders.
+
+The Bulk Boto package solves these issues. It speeds up transferring of many small files to Amazon AWS S3 by 
+executing multiple download/upload operations in parallel by leveraging the Python multiprocessing module. 
+Depending on the number of cores of your machine, Bulk Boto can make S3 transfers even 100X faster than sequential 
+mode using traditional Boto3! Furthermore, Bulk Boto can keep the original folder structure of files and 
+directories when transferring them.
+
 ### Main Functionalities
-  - Multi thread uploading/downloading of a directory (with its whole structure) to/from S3 object storage
+  - Multi thread uploading/downloading of a directory (keeping the directory structure) to/from S3 object storage
   - Deleting all objects of an S3 bucket
   - Checking the existence of an object on the S3 bucket
   - Listing all objects on an S3 bucket
@@ -66,7 +80,7 @@ pip install bulk_boto
 ## Usage
 You can find the following scripts in [examples.py](examples.py).
 
-#### Import and instantiate a `BulkBoto` object
+#### Import and instantiate a `BulkBoto` object with your credentials
 ```python
 from bulk_boto import BulkBoto
 TARGET_BUCKET = "test-bucket"
@@ -185,7 +199,9 @@ print(
 ```
 
 ### Benchmark
-Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds.
+Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds that is about 
+72X faster than the non-parallel mode.
+
 
 ## Contributing
 Any contributions you make are **greatly appreciated**. If you have a suggestion that would make this better, please fork the repo and create a pull request. 
