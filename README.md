@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/iamirmasoud/bulkboto">
-    <img src="imgs/logo.jpg" alt="Logo" width="100" height="100">
+    <img src="https://raw.githubusercontent.com/iamirmasoud/bulkboto/main/imgs/logo.jpg" alt="Logo" width="100" height="100">
   </a>
     
   <h3 align="center">Bulk Boto</h3>
@@ -15,7 +15,7 @@
     <a href="https://github.com/iamirmasoud/bulkboto"><strong>Explore the docs »</strong></a>
     <br /> 
     -->
-    <a href="examples.py">View Examples</a>
+    <a href="https://github.com/iamirmasoud/bulkboto/blob/main/examples.py">View Examples</a>
     ·
     <a href="https://github.com/iamirmasoud/bulkboto/issues">Report Bug/Request Feature</a>
   </p>
@@ -78,7 +78,7 @@ pip install bulkboto
 ```
 
 ## Usage
-You can find the following scripts in [examples.py](examples.py).
+You can find the following scripts in [examples.py](https://github.com/iamirmasoud/bulkboto/blob/main/examples.py).
 
 #### Import and instantiate a `BulkBoto` object with your credentials
 ```python
