@@ -48,6 +48,7 @@ setup(
         "Boto3",
         "S3",
         "Parallel",
+        "Multi-thread",
         "Bulk",
         "Boto",
         "Bulk Boto",

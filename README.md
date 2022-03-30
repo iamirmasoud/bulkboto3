@@ -179,7 +179,7 @@ print(
 # output: True
 ```
 
-#### Get list of objects in a bucket (with prefix)
+#### Get the list of objects in a bucket (with prefix)
 ```python
 print(
     bulkboto_agent.list_objects(
@@ -213,7 +213,7 @@ You can also simply open an issue with the tag "enhancement". To contribute to `
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a pull request
 
-Alternatively see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+Alternatively, see the GitHub documentation on [creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
 ## Contributors
 Thanks to the following people who have contributed to this project:
