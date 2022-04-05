@@ -1,4 +1,4 @@
-<!--# Bulk Boto: Python package for parallel and bulk operations on S3 based on boto3-->
+<!--# Bulk Boto: Python package for fast and parallel transferring a bulk of files to S3 based on boto3-->
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -6,10 +6,10 @@
     <img src="https://raw.githubusercontent.com/iamirmasoud/bulkboto/main/imgs/logo.jpg" alt="Logo" width="100" height="100">
   </a>
     
-  <h3 align="center">Bulk Boto</h3>
+  <h3 align="center">Bulk Boto (bulkboto)</h3>
 
   <p align="center">
-    Python package for fast and parallel transfer of bulk of files to S3 based on boto3!
+    Python package for fast and parallel transferring a bulk of files to S3 based on boto3!
     <br />
     <!-- 
     <a href="https://github.com/iamirmasoud/bulkboto"><strong>Explore the docs »</strong></a>
@@ -155,6 +155,45 @@ new_test_dir
 ```
 You can set `local_dir=''` (it is the default value) to avoid the creation of the `new_test_dir` directory. 
 
+#### Upload/Download arbitrary files to/from an S3 bucket
+To transfer a list of arbitrary files to a bucket, you should instantiate `StorageTransferPath` class 
+to determine the storage (s3) and local paths, and then use `.upload()` and `.download()` methods. 
+Here is an example:
+
+```python
+# upload arbitrary files from local to an S3 bucket
+upload_paths = [
+    StorageTransferPath(
+        local_path="test_dir/first_subdir/f2",
+        storage_path="f2",
+    ),
+    StorageTransferPath(
+        local_path="test_dir/second_subdir/f4",
+        storage_path="my_storage_dir/f4",
+    ),
+]
+bulkboto_agent.upload(bucket_name=TARGET_BUCKET, upload_paths=upload_paths)
+# output:
+# 100%|██████████| 2/2 [00:00<00:00,  2.44it/s]
+# 2022-04-05 13:40:10 — INFO — Successfully uploaded 2 files to bucket: 'test-bucket'.
+```
+```python
+# download arbitrary files from an S3 bucket to local
+download_paths = [
+    StorageTransferPath(
+        storage_path="f2",
+        local_path="f2",
+    ),
+    StorageTransferPath(
+        storage_path="my_storage_dir/f4",
+        local_path="f5",
+    ),
+]
+bulkboto_agent.download(bucket_name=TARGET_BUCKET, download_paths=download_paths)
+# output:
+# 100%|██████████| 2/2 [00:00<00:00,  2.44it/s]
+# 2022-04-05 13:34:10 — INFO — Successfully downloaded 2 files from bucket: 'test-bucket'.
+```
 #### Delete all objects on a bucket
 ```python
 bulkboto_agent.empty_bucket(TARGET_BUCKET)

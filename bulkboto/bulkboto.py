@@ -77,7 +77,7 @@ class BulkBoto:
             self.resource.create_bucket(Bucket=bucket_name)
             logger.info(f"Successfully created new bucket: '{bucket_name}'.")
         except Exception as e:
-            logger.warning(f"Cannot create bucket: '{bucket_name}'. {e}")
+            logger.warning(f"Cannot create a new bucket: '{bucket_name}'. {e}")
 
     def empty_bucket(self, bucket_name: str) -> None:
         """
@@ -104,8 +104,15 @@ class BulkBoto:
         if isinstance(upload_paths, StorageTransferPath):
             upload_paths = [upload_paths]
         bucket = self._get_bucket(bucket_name)
-        for path in tqdm(upload_paths, disable=not self.verbose):
-            bucket.upload_file(path.local_path, path.storage_path)
+        try:
+            for path in tqdm(upload_paths, disable=not self.verbose):
+                bucket.upload_file(path.local_path, path.storage_path)
+            logger.info(
+                f"Successfully uploaded {len(upload_paths)} files to bucket: '{bucket_name}'."
+            )
+        except Exception as e:
+            logger.exception(f"Cannot upload files. {e}")
+            raise
 
     def download(
         self,
@@ -121,8 +128,16 @@ class BulkBoto:
             download_paths = [download_paths]
 
         bucket = self._get_bucket(bucket_name)
-        for path in tqdm(download_paths, disable=not self.verbose):
-            bucket.download_file(path.storage_path, path.local_path)
+        try:
+            for path in tqdm(download_paths, disable=not self.verbose):
+                bucket.download_file(path.storage_path, path.local_path)
+            logger.info(
+                f"Successfully downloaded {len(download_paths)} files from bucket: '{bucket_name}'."
+            )
+
+        except Exception as e:
+            logger.exception(f"Cannot download files. {e}")
+            raise
 
     def check_object_exists(
         self,

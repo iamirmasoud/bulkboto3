@@ -8,8 +8,8 @@ HERE = pathlib.Path(__file__).parent
 
 # Package meta-data.
 NAME = "bulkboto"
-VERSION = "1.0.2"
-DESCRIPTION = "A python package for parallel and bulk operations on S3 based on boto3"
+VERSION = "1.0.3"
+DESCRIPTION = "Python package for fast and parallel transferring a bulk of files to S3 based on boto3"
 URL = "https://github.com/iamirmasoud/bulkboto"
 AUTHOR = "Amir Masoud Sefidian"
 AUTHOR_EMAIL = "amir.masoud.sefidian@gmail.com"

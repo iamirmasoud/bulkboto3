@@ -1,6 +1,6 @@
 import logging
 
-from bulkboto import BulkBoto
+from bulkboto import BulkBoto, StorageTransferPath
 
 logging.basicConfig(
     level="INFO",
@@ -42,6 +42,31 @@ bulkboto_agent.download_dir_from_storage(
     n_threads=NUM_TRANSFER_THREADS,
 )
 
+# upload arbitrary files to an S3 bucket
+upload_paths = [
+    StorageTransferPath(
+        local_path="test_dir/first_subdir/f2",
+        storage_path="f2",
+    ),
+    StorageTransferPath(
+        local_path="test_dir/second_subdir/f4",
+        storage_path="my_storage_dir/f4",
+    ),
+]
+bulkboto_agent.upload(bucket_name=TARGET_BUCKET, upload_paths=upload_paths)
+
+# download arbitrary files from an S3 bucket
+download_paths = [
+    StorageTransferPath(
+        storage_path="f2",
+        local_path="f2",
+    ),
+    StorageTransferPath(
+        storage_path="my_storage_dir/f4",
+        local_path="f5",
+    ),
+]
+bulkboto_agent.download(bucket_name=TARGET_BUCKET, download_paths=download_paths)
 
 # check if a file exists in a bucket
 print(
@@ -56,12 +81,9 @@ print(
     )
 )
 
-
 # get list of objects in a bucket (with prefix)
 print(
-    bulkboto_agent.list_objects(
-        bucket_name=TARGET_BUCKET, storage_dir="my_storage_dir"
-    )
+    bulkboto_agent.list_objects(bucket_name=TARGET_BUCKET, storage_dir="my_storage_dir")
 )
 print(
     bulkboto_agent.list_objects(

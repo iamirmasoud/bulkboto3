@@ -1,4 +1,7 @@
 # Change Log:
+**v1.0.3:**
+- Add use case of transferring arbitrary files to S3
+
 **v1.0.2:**
 - Fix `find_namespace_packages` argument in `setup.py`
 
