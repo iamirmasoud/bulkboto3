@@ -2,23 +2,28 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/iamirmasoud/bulkboto">
-    <img src="https://raw.githubusercontent.com/iamirmasoud/bulkboto/main/imgs/logo.jpg" alt="Logo" width="100" height="100">
+  <a href="https://github.com/iamirmasoud/bulkboto3">
+    <img src="https://raw.githubusercontent.com/iamirmasoud/bulkboto3/main/imgs/logo.png" alt="Logo" width="100" height="100">
   </a>
     
-  <h3 align="center">Bulk Boto (bulkboto)</h3>
+  <h3 align="center">Bulk Boto3 (bulkboto3)</h3>
 
   <p align="center">
     Python package for fast and parallel transferring a bulk of files to S3 based on boto3!
     <br />
     <!-- 
-    <a href="https://github.com/iamirmasoud/bulkboto"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/iamirmasoud/bulkboto3"><strong>Explore the docs »</strong></a>
     <br /> 
     -->
-    <a href="https://github.com/iamirmasoud/bulkboto/blob/main/examples.py">View Examples</a>
+    <a href="https://github.com/iamirmasoud/bulkboto3/blob/main/examples.py">View Examples</a>
     ·
-    <a href="https://github.com/iamirmasoud/bulkboto/issues">Report Bug/Request Feature</a>
-  </p>
+    <a href="https://github.com/iamirmasoud/bulkboto3/issues">Report Bug/Request Feature</a>
+
+![Python](https://img.shields.io/pypi/pyversions/bulkboto3.svg?style=flat&https://pypi.python.org/pypi/bulkboto3/)
+![Version](http://img.shields.io/pypi/v/bulkboto3.svg?style=flat&https://pypi.python.org/pypi/bulkboto3/)
+![License](http://img.shields.io/pypi/l/bulkboto3.svg?style=flat&https://github.com/boto/bulkboto3/blob/develop/LICENSE)
+    
+</p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -26,7 +31,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-bulk-boto">About Bulk Boto</a>
+      <a href="#about-bulkboto3">About bulkboto3</a>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -43,7 +48,7 @@
   </ol>
 </details>
 
-## About Bulk Boto
+## About bulkboto3
 [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html) is the official Python SDK 
 for accessing and managing all AWS resources such as Amazon Simple Storage Service (S3). 
 Generally, it's pretty ok to transfer a small number of files using Boto3. However, transferring a large number of 
@@ -52,10 +57,10 @@ it can take up to hours to transfer hundreds of thousands, or millions, of files
 Moreover, because Amazon S3 does not have folders/directories, managing the hierarchy of directories and files 
 manually can be a bit tedious especially if there are many files located in different folders.
 
-The Bulk Boto package solves these issues. It speeds up transferring of many small files to Amazon AWS S3 by 
+The `bulkboto3` package solves these issues. It speeds up transferring of many small files to Amazon AWS S3 by 
 executing multiple download/upload operations in parallel by leveraging the Python multiprocessing module. 
-Depending on the number of cores of your machine, Bulk Boto can make S3 transfers even 100X faster than sequential 
-mode using traditional Boto3! Furthermore, Bulk Boto can keep the original folder structure of files and 
+Depending on the number of cores of your machine, Bulk Boto3 can make S3 transfers even 100X faster than sequential 
+mode using traditional Boto3! Furthermore, Bulk Boto3 can keep the original folder structure of files and 
 directories when transferring them. There are also some other features as follows.
 
 ### Main Functionalities
@@ -71,23 +76,23 @@ directories when transferring them. There are also some other features as follow
 * [pip](https://pip.pypa.io/en/stable/)
   
 ### Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulkboto`.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulkboto3`.
 
 ```bash
-pip install bulkboto
+pip install bulkboto3
 ```
 
 ## Usage
 You can find the following scripts in [examples.py](https://github.com/iamirmasoud/bulkboto/blob/main/examples.py).
 
-#### Import and instantiate a `BulkBoto` object with your credentials
+#### Import and instantiate a `BulkBoto3` object with your credentials
 ```python
-from bulkboto import BulkBoto
+from bulkboto3 import BulkBoto3
 TARGET_BUCKET = "test-bucket"
 NUM_TRANSFER_THREADS = 50
 TRANSFER_VERBOSITY = True
 
-bulkboto_agent = BulkBoto(
+bulkboto_agent = BulkBoto3(
     resource_type="s3",
     endpoint_url="<Your storage endpoint>",
     aws_access_key_id="<Your access key>",
@@ -244,7 +249,7 @@ Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds t
 
 ## Contributing
 Any contributions you make are **greatly appreciated**. If you have a suggestion that would make this better, please fork the repo and create a pull request. 
-You can also simply open an issue with the tag "enhancement". To contribute to `bulkboto`, follow these steps:
+You can also simply open an issue with the tag "enhancement". To contribute to `bulkboto3`, follow these steps:
 
 1. Fork this repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)

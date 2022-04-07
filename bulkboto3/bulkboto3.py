@@ -28,7 +28,7 @@ def single_download(input_tuple):
     bucket.download_file(download_path.storage_path, download_path.local_path)
 
 
-class BulkBoto:
+class BulkBoto3:
     def __init__(
         self,
         endpoint_url: str,
@@ -53,7 +53,8 @@ class BulkBoto:
                 aws_access_key_id=aws_access_key_id,
                 aws_secret_access_key=aws_secret_access_key,
                 config=Config(
-                    signature_version="s3v4", max_pool_connections=max_pool_connections
+                    signature_version="s3v4",
+                    max_pool_connections=max_pool_connections,
                 ),
             )
         except Exception as e:
@@ -160,14 +161,19 @@ class BulkBoto:
                 logger.exception("Something else has gone wrong.")
                 raise
 
-    def list_objects(self, bucket_name: str, storage_dir: str = "") -> List[str]:
+    def list_objects(
+        self, bucket_name: str, storage_dir: str = ""
+    ) -> List[str]:
         """
         Get the list of all objects in a specific directory on the object storage.
         :param bucket_name: Name of the bucket.
         :param storage_dir: Base directory on the object storage to get list of objects.
         """
         bucket = self._get_bucket(bucket_name)
-        return [_object.key for _object in bucket.objects.filter(Prefix=storage_dir)]
+        return [
+            _object.key
+            for _object in bucket.objects.filter(Prefix=storage_dir)
+        ]
 
     def upload_dir_to_storage(
         self,
@@ -256,7 +262,9 @@ class BulkBoto:
         logger.info(
             f"Start downloading from '{storage_dir}' on storage to local '{local_dir}' with {n_threads} threads."
         )
-        objects = self.list_objects(bucket_name=bucket_name, storage_dir=storage_dir)
+        objects = self.list_objects(
+            bucket_name=bucket_name, storage_dir=storage_dir
+        )
 
         # create the directories structure in local
         unique_dirs = {os.path.dirname(path) for path in objects}
@@ -292,7 +300,9 @@ class BulkBoto:
                         )
                     )
             else:
-                self.download(bucket_name=bucket_name, download_paths=download_paths)
+                self.download(
+                    bucket_name=bucket_name, download_paths=download_paths
+                )
 
             logger.info(
                 f"Successfully downloaded {len(download_paths)} files from bucket: '{bucket_name}' "
