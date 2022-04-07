@@ -1,4 +1,7 @@
 # Change Log:
+**v1.1.0:**
+- Change package name to `bulkboto3`
+
 **v1.0.3:**
 - Add use case of transferring arbitrary files to S3
 

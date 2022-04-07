@@ -1,6 +1,6 @@
 import logging
 
-from bulkboto import BulkBoto, StorageTransferPath
+from bulkboto3 import BulkBoto3, StorageTransferPath
 
 logging.basicConfig(
     level="INFO",
@@ -13,8 +13,8 @@ TARGET_BUCKET = "test-bucket"
 NUM_TRANSFER_THREADS = 50
 TRANSFER_VERBOSITY = True
 
-# instantiate a BulkBoto object
-bulkboto_agent = BulkBoto(
+# instantiate a BulkBoto3 object
+bulkboto_agent = BulkBoto3(
     resource_type="s3",
     endpoint_url="<Your storage endpoint>",
     aws_access_key_id="<Your access key>",
@@ -66,7 +66,9 @@ download_paths = [
         local_path="f5",
     ),
 ]
-bulkboto_agent.download(bucket_name=TARGET_BUCKET, download_paths=download_paths)
+bulkboto_agent.download(
+    bucket_name=TARGET_BUCKET, download_paths=download_paths
+)
 
 # check if a file exists in a bucket
 print(
@@ -83,7 +85,9 @@ print(
 
 # get list of objects in a bucket (with prefix)
 print(
-    bulkboto_agent.list_objects(bucket_name=TARGET_BUCKET, storage_dir="my_storage_dir")
+    bulkboto_agent.list_objects(
+        bucket_name=TARGET_BUCKET, storage_dir="my_storage_dir"
+    )
 )
 print(
     bulkboto_agent.list_objects(
