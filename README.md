@@ -21,7 +21,7 @@
 
 ![Python](https://img.shields.io/pypi/pyversions/bulkboto3.svg?style=flat&https://pypi.python.org/pypi/bulkboto3/)
 ![Version](http://img.shields.io/pypi/v/bulkboto3.svg?style=flat&https://pypi.python.org/pypi/bulkboto3/)
-![License](http://img.shields.io/pypi/l/bulkboto3.svg?style=flat&https://github.com/boto/bulkboto3/blob/develop/LICENSE)
+![License](http://img.shields.io/pypi/l/bulkboto3.svg?style=flat&https://github.com/iamirmasoud/bulkboto3/blob/main/LICENSE)
     
 </p>
 </div>

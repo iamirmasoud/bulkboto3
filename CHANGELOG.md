@@ -1,4 +1,7 @@
 # Change Log:
+**v1.1.1:**
+- Fix licence badge.
+
 **v1.1.0:**
 - Change package name to `bulkboto3`
 
