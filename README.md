@@ -65,21 +65,21 @@ mode using traditional Boto3! Furthermore, Bulk Boto3 can keep the original fold
 directories when transferring them. There are also some other features as follows.
 
 ### Main Functionalities
-  - Multi thread uploading/downloading of a directory (keeping the directory structure) to/from S3 object storage
+  - Multi-thread uploading/downloading of a directory (keeping the directory structure) to/from S3 object storage
   - Deleting all objects of an S3 bucket
   - Checking the existence of an object on the S3 bucket
   - Listing all objects on an S3 bucket
-  - Creating a new S3 bucket on the object storage
+  - Creating a new bucket on the S3
 
 ## Getting Started
 ### Prerequisites
 * [Python 3.6+](https://www.python.org/)
 * [pip](https://pip.pypa.io/en/stable/)
-* API credentials to access an S3. 
+* API credentials to access an S3 
 
 **Note**:
 You can deploy a free S3 server using [MinIO](https://min.io/) 
-on your local machine by following steps explained in: [Deploy Standalone MinIO using Docker Compose on Linux](http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/).
+on your local machine by following the steps explained in: [Deploy Standalone MinIO using Docker Compose on Linux](http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/).
   
 ### Installation
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulkboto3`.
@@ -113,7 +113,7 @@ bulkboto_agent = BulkBoto3(
 bulkboto_agent.create_new_bucket(bucket_name=TARGET_BUCKET)
 ```
 
-####  Upload a whole directory with its structure to an S3 bucket in multi thread mode
+####  Upload a whole directory with its structure to an S3 bucket in multi-thread mode
 Suppose that there is a directory with the following structure on your local machine:
 ```console
 test_dir
@@ -125,7 +125,7 @@ test_dir
     └── f4
 ```
 To upload the directory (with its subdirectories) to the bucket 
-under a new directory name called `my_storage_dir`:
+under a new directory name called `my_storage_dir`, use the following command:
 ```python
 bulkboto_agent.upload_dir_to_storage(
      bucket_name=TARGET_BUCKET,
@@ -139,7 +139,7 @@ bulkboto_agent.upload_dir_to_storage(
 # 2022-03-26 18:12:41 — INFO — Successfully uploaded 4 files to bucket 'test-bucket' in 0.07 seconds.
 ```
 
-#### Download a whole directory with its structure to a local directory in multi thread mode
+#### Download a whole directory with its structure to a local directory in multi-thread mode
 ```python
 bulkboto_agent.download_dir_from_storage(
     bucket_name=TARGET_BUCKET,
@@ -153,7 +153,7 @@ bulkboto_agent.download_dir_from_storage(
 # 2022-03-26 18:14:09 — INFO — Successfully downloaded 4 files from bucket: 'test-bucket' in 0.04 seconds.
 ```
 
-The structure of downloaded directory will be as follows on the local directory:
+The structure of the downloaded directory will be as follows on the local directory:
 ```console
 new_test_dir
 └── my_storage_dir
@@ -249,7 +249,7 @@ print(
 ```
 
 ### Benchmark
-Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds that is about 
+Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds that was about 
 72X faster than the non-parallel mode.
 
 ## Blog Posts
