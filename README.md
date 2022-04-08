@@ -41,6 +41,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#blog-posts">Blog Posts</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contributors">Contributors</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -72,8 +73,13 @@ directories when transferring them. There are also some other features as follow
 
 ## Getting Started
 ### Prerequisites
-* [Python 3.3+](https://www.python.org/)
+* [Python 3.6+](https://www.python.org/)
 * [pip](https://pip.pypa.io/en/stable/)
+* API credentials to access an S3. 
+
+**Note**:
+You can deploy a free S3 server using [MinIO](https://min.io/) 
+on your local machine by following steps explained in: [Deploy Standalone MinIO using Docker Compose on Linux](http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/).
   
 ### Installation
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulkboto3`.
@@ -245,6 +251,10 @@ print(
 ### Benchmark
 Uploaded 88800 small files (totally about 7GB) with 100 threads in 505 seconds that is about 
 72X faster than the non-parallel mode.
+
+## Blog Posts
+- [BulkBoto3: Python package for fast and parallel transferring a bulk of files to S3 based on boto3!](http://www.sefidian.com/2022/03/28/bulkboto3-python-package-for-fast-and-parallel-transferring-a-bulk-of-files-to-s3-based-on-boto3/)
+- [Deploy Standalone MinIO using Docker Compose on Linux](http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/).
 
 
 ## Contributing

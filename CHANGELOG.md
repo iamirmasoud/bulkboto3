@@ -1,5 +1,9 @@
 # Change Log:
 **v1.1.1:**
+- Add Standalone MinIO deployment link to README.md.
+- Add blog posts to README.md.
+
+**v1.1.1:**
 - Fix licence badge.
 
 **v1.1.0:**
