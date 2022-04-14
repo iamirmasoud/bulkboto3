@@ -15,9 +15,12 @@
     <a href="https://github.com/iamirmasoud/bulkboto3"><strong>Explore the docs »</strong></a>
     <br /> 
     -->
+    <a href="https://pypi.org/project/bulkboto3/">See on PyPI</a>
+    ·
     <a href="https://github.com/iamirmasoud/bulkboto3/blob/main/examples.py">View Examples</a>
     ·
     <a href="https://github.com/iamirmasoud/bulkboto3/issues">Report Bug/Request Feature</a>
+    
 
 ![Python](https://img.shields.io/pypi/pyversions/bulkboto3.svg?style=flat&https://pypi.python.org/pypi/bulkboto3/)
 ![Version](http://img.shields.io/pypi/v/bulkboto3.svg?style=flat&https://pypi.python.org/pypi/bulkboto3/)
@@ -82,7 +85,7 @@ You can deploy a free S3 server using [MinIO](https://min.io/)
 on your local machine by following the steps explained in: [Deploy Standalone MinIO using Docker Compose on Linux](http://www.sefidian.com/2022/04/08/deploy-standalone-minio-using-docker-compose/).
   
 ### Installation
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install `bulkboto3`.
+Use the package manager [pip](https://pypi.org/project/bulkboto3/) to install `bulkboto3`.
 
 ```bash
 pip install bulkboto3
