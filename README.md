@@ -278,7 +278,7 @@ Thanks to the following people who have contributed to this project:
 * [Amir Masoud Sefidian](https://sefidian.com/) 📖
 
 ## Contact
-If you want to contact me you can reach me at [amir.masoud.sefidian@gmail.com](mailto:amir.masoud.sefidian@gmail.com).
+If you want to contact me you can reach me at [a.m.sefidian@gmail.com](mailto:a.m.sefidian@gmail.com).
 
 ## License
 Distributed under the [MIT](https://choosealicense.com/licenses/mit/) License. See `LICENSE` for more information.
