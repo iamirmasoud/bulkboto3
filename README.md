@@ -92,7 +92,7 @@ pip install bulkboto3
 ```
 
 ## Usage
-You can find the following scripts in [examples.py](https://github.com/iamirmasoud/bulkboto/blob/main/examples.py).
+You can find the following scripts in [examples.py](https://github.com/iamirmasoud/bulkboto/blob/main/examples.py) and [examples.ipynb Notebook](https://github.com/iamirmasoud/bulkboto/blob/main/examples.ipynb).
 
 #### Import and instantiate a `BulkBoto3` object with your credentials
 ```python

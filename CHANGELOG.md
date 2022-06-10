@@ -1,5 +1,8 @@
 # Change Log:
-**v1.1.1:**
+**v1.1.3:**
+- Add examples as a Jupyter Notebook file.
+
+**v1.1.2:**
 - Add Standalone MinIO deployment link to README.md.
 - Add blog posts to README.md.
 
