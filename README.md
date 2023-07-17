@@ -173,6 +173,8 @@ You can set `local_dir=''` (it is the default value) to avoid the creation of th
 #### Upload/Download arbitrary files to/from an S3 bucket
 To transfer a list of arbitrary files to a bucket, you should instantiate `StorageTransferPath` class 
 to determine the storage (s3) and local paths, and then use `.upload()` and `.download()` methods. 
+Note that these are serial operations.
+
 Here is an example:
 
 ```python
@@ -209,6 +211,20 @@ bulkboto_agent.download(bucket_name=TARGET_BUCKET, download_paths=download_paths
 # 100%|██████████| 2/2 [00:00<00:00,  2.44it/s]
 # 2022-04-05 13:34:10 — INFO — Successfully downloaded 2 files from bucket: 'test-bucket'.
 ```
+
+You can also perform arbitrary upload and downloads in parallel.
+
+```python
+bulkboto_agent.parallel_upload(bucket_name=TARGET_BUCKET, upload_paths=upload_paths, n_threads=NUMBER_OF_THREADS)
+
+```
+or
+
+```python
+bulkboto_agent.parallel_download(bucket_name=TARGET_BUCKET, download_paths=download_paths, n_threads=NUMBER_OF_THREADS)
+```
+
+
 #### Delete all objects on a bucket
 ```python
 bulkboto_agent.empty_bucket(TARGET_BUCKET)

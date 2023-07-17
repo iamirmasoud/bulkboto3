@@ -29,6 +29,7 @@ def single_download(input_tuple):
 
 
 class BulkBoto3:
+
     def __init__(
         self,
         endpoint_url: str,
@@ -161,9 +162,9 @@ class BulkBoto3:
                 logger.exception("Something else has gone wrong.")
                 raise
 
-    def list_objects(
-        self, bucket_name: str, storage_dir: str = ""
-    ) -> List[str]:
+    def list_objects(self,
+                     bucket_name: str,
+                     storage_dir: str = "") -> List[str]:
         """
         Get the list of all objects in a specific directory on the object storage.
         :param bucket_name: Name of the bucket.
@@ -189,15 +190,9 @@ class BulkBoto3:
         :param storage_dir: Object storage base directory to upload objects.
         :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel mode.
         """
-        logger.info(
-            f"Start uploading from local '{local_dir}' to '{storage_dir}' on the object storage "
-            f"with {n_threads} threads."
-        )
-
         if not Path(local_dir).is_dir():
             raise DirectoryNotFoundException(
-                f"Directory `{local_dir}` does not exists."
-            )
+                f"Directory `{local_dir}` does not exists.")
 
         local_files = [
             str(path) for path in Path(local_dir).rglob("*") if path.is_file()
@@ -205,45 +200,14 @@ class BulkBoto3:
         upload_paths = []
         for local_file_path in local_files:
             storage_file_path = os.path.join(
-                storage_dir, os.path.relpath(local_file_path, local_dir)
-            )
+                storage_dir, os.path.relpath(local_file_path, local_dir))
             upload_paths.append(
-                StorageTransferPath(
-                    storage_path=storage_file_path, local_path=local_file_path
-                )
-            )
+                StorageTransferPath(storage_path=storage_file_path,
+                                    local_path=local_file_path))
 
-        if not upload_paths:
-            logger.warning(f"No files found at `{local_dir}`.")
-            return
-
-        try:
-            start_time = time.time()
-            # parallel operation
-            if n_threads > 1:
-                bucket = self._get_bucket(bucket_name)
-                with ThreadPool(n_threads) as pool:
-                    list(
-                        tqdm(
-                            pool.imap(
-                                single_upload,
-                                zip(itertools.repeat(bucket), upload_paths),
-                            ),
-                            total=len(upload_paths),
-                            disable=not self.verbose,
-                        )
-                    )
-            # serial operation
-            else:
-                self.upload(bucket_name=bucket_name, upload_paths=upload_paths)
-
-            logger.info(
-                f"Successfully uploaded {len(upload_paths)} files to bucket '{bucket_name}' "
-                f"in {(time.time() - start_time):.2f} seconds."
-            )
-        except Exception as e:
-            logger.exception(f"Cannot upload files. {e}")
-            raise
+        self.parallel_upload(bucket_name=bucket_name,
+                             n_threads=n_threads,
+                             upload_paths=upload_paths)
 
     def download_dir_from_storage(
         self,
@@ -259,12 +223,8 @@ class BulkBoto3:
         :param storage_dir: Object storage base directory to download objects from.
         :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel mode.
         """
-        logger.info(
-            f"Start downloading from '{storage_dir}' on storage to local '{local_dir}' with {n_threads} threads."
-        )
-        objects = self.list_objects(
-            bucket_name=bucket_name, storage_dir=storage_dir
-        )
+        objects = self.list_objects(bucket_name=bucket_name,
+                                    storage_dir=storage_dir)
 
         # create the directories structure in local
         unique_dirs = {os.path.dirname(path) for path in objects}
@@ -278,36 +238,95 @@ class BulkBoto3:
                 StorageTransferPath(
                     storage_path=_object,
                     local_path=os.path.join(local_dir, _object),
-                )
-            )
+                ))
+
+        self.parallel_download(bucket_name=bucket_name,
+                               download_paths=download_paths,
+                               n_threads=n_threads)
+
+    def parallel_download(
+        self,
+        bucket_name: str,
+        download_paths: List[StorageTransferPath],
+        n_threads: int = mp.cpu_count() * 7,
+    ) -> None:
+        """
+        Performs a set of arbitrary downloads in parallel.
+
+        :param bucket_name: Name of the bucket
+        :param download_paths: List of `StorageTransferPath` objects to download from S3.
+        :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel mode.
+        """
+        logger.info(
+            f"Starting download of {len(download_paths)} objects from storage to local, with {n_threads} threads."
+        )
 
         if not download_paths:
-            logger.warning(f"No files found at `{storage_dir}`.")
+            logger.warning("No download_paths provided.")
             return
+
         try:
             start_time = time.time()
             bucket = self._get_bucket(bucket_name)
             if n_threads > 1:
                 with ThreadPool(n_threads) as pool:
                     list(
-                        tqdm(
-                            pool.imap(
-                                single_download,
-                                zip(itertools.repeat(bucket), download_paths),
-                            ),
-                            total=len(download_paths),
-                            disable=not self.verbose,
-                        )
-                    )
+                        tqdm(pool.imap(
+                            single_download,
+                            zip(itertools.repeat(bucket), download_paths),
+                        ),
+                             total=len(download_paths),
+                             disable=not self.verbose))
             else:
-                self.download(
-                    bucket_name=bucket_name, download_paths=download_paths
-                )
+                self.download(bucket_name=bucket_name,
+                              download_paths=download_paths)
 
             logger.info(
                 f"Successfully downloaded {len(download_paths)} files from bucket: '{bucket_name}' "
-                f"in {(time.time() - start_time):.2f} seconds."
-            )
+                f"in {(time.time() - start_time):.2f} seconds.")
         except Exception as e:
-            logger.exception(f"Cannot download files. {e}")
+            logger.exception(f"Cannot downloads files. {e}")
+            raise
+
+    def parallel_upload(
+        self,
+        bucket_name: str,
+        upload_paths: List[StorageTransferPath],
+        n_threads: int = mp.cpu_count() * 7,
+    ) -> None:
+        """
+        Performs a set of arbitrary uploads in parallel.
+
+        :param bucket_name: Name of the bucket
+        :param download_paths: List of `StorageTransferPath` objects to download from S3.
+        :param n_threads: Number of threads to use. Set `n_threads` to 1 for non-parallel mode.
+        """
+        logger.info(
+            f"Starting upload of {len(upload_paths)} objects from local to storage, with {n_threads} threads."
+        )
+
+        if not upload_paths:
+            logger.warning("No upload_paths provided.")
+            return
+
+        try:
+            start_time = time.time()
+            bucket = self._get_bucket(bucket_name)
+            if n_threads > 1:
+                with ThreadPool(n_threads) as pool:
+                    list(
+                        tqdm(pool.imap(
+                            single_upload,
+                            zip(itertools.repeat(bucket), upload_paths),
+                        ),
+                             total=len(upload_paths),
+                             disable=not self.verbose))
+            else:
+                self.upload(bucket_name=bucket_name, upload_paths=upload_paths)
+
+            logger.info(
+                f"Succesfully uploaded {len(upload_paths)} from bucket : '{bucket_name}' "
+                f"in {(time.time() - start_time):.2f} seconds.")
+        except Exception as e:
+            logger.exception(f"Cannot upload files. {e}")
             raise
