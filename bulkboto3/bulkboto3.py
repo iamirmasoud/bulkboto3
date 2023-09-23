@@ -18,9 +18,18 @@ from .transfer_path import StorageTransferPath
 logger = logging.getLogger(__name__)
 
 
-def single_upload(input_tuple):
+def single_upload(input_tuple, metadata=None):
+    '''
+    :param input_tuple: (bucket, upload_path)
+    :param metadata: {'ContentType': content_type}
+    :return:
+    '''
     bucket, upload_path = input_tuple
-    bucket.upload_file(upload_path.local_path, upload_path.storage_path)
+    extra_args = {}
+    if metadata:
+        extra_args['Metadata'] = metadata
+
+    bucket.upload_file(upload_path.local_path, upload_path.storage_path, extra_args=extra_args)
 
 
 def single_download(input_tuple):
